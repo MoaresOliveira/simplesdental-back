@@ -2,9 +2,9 @@ package com.simplesdental.product.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.Constraint;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
@@ -16,19 +16,28 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Length(max = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
+    @Length(max = 255)
     private String description;
 
+    @NotNull
+    @DecimalMin(value = "0", inclusive = false)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal price;
 
     @NotNull
+    @Column(nullable = false)
     private Boolean status;
 
     private String code;
-    
+
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnoreProperties({"products"})
     private Category category;
 
