@@ -1,7 +1,9 @@
 package com.simplesdental.product.controller;
 
+import com.simplesdental.product.controller.swagger.annotations.product.*;
 import com.simplesdental.product.model.Product;
 import com.simplesdental.product.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Product Controller")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -25,17 +28,22 @@ public class ProductController {
 
     @GetMapping
     @Transactional
-    public List<Product> getAllProducts() {
+    @GetAllProducts
+    public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.findAll();
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         products.forEach(product -> {
             if (product.getCategory() != null) {
                 Hibernate.initialize(product.getCategory());
             }
         });
-        return products;
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
+    @GetProductById
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return productService.findById(id)
                 .map(product -> {
@@ -49,11 +57,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CreateProduct
     public Product createProduct(@Valid @RequestBody Product product) {
         return productService.save(product);
     }
 
     @PutMapping("/{id}")
+    @UpdateProduct
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Valid @RequestBody Product product) {
         return productService.findById(id)
                 .map(existingProduct -> {
@@ -64,6 +74,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @DeleteProduct
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         return productService.findById(id)
                 .map(product -> {

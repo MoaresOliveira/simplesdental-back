@@ -11,14 +11,14 @@ public class ErrorResponseDTO {
     private final int status;
     private final String error;
     private final String path;
-    private final Map<String, String> errors;
+    private final Map<String, String> fields;
 
-    public ErrorResponseDTO(HttpStatus status, String path, Map<String, String> errors) {
+    public ErrorResponseDTO(HttpStatus status, String path, Map<String, String> fields) {
         this.timestamp = Instant.now().toEpochMilli();
         this.status = status.value();
         this.error = status.getReasonPhrase();
         this.path = path;
-        this.errors = errors;
+        this.fields = fields;
     }
 
     public long getTimestamp() {
@@ -37,7 +37,7 @@ public class ErrorResponseDTO {
         return path;
     }
 
-    public Map<String, String> getErrors() {
-        return errors;
+    public Map<String, String> getFields() {
+        return fields;
     }
 }

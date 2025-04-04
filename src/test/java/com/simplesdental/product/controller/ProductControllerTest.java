@@ -1,6 +1,7 @@
 package com.simplesdental.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simplesdental.product.model.Category;
 import com.simplesdental.product.model.Product;
 import com.simplesdental.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,11 @@ public class ProductControllerTest {
         product.setPrice(new BigDecimal("19.99"));
         product.setStatus(true);
         product.setCode("TP001");
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("Test Category");
+        category.setDescription("Test Description");
+        product.setCategory(category);
     }
 
     @Test
