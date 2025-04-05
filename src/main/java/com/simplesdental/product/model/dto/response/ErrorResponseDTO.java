@@ -1,4 +1,4 @@
-package com.simplesdental.product.model.dto;
+package com.simplesdental.product.model.dto.response;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,13 +1,14 @@
 package com.simplesdental.product.controller.category.swagger;
 
 import com.simplesdental.product.model.Category;
-import com.simplesdental.product.model.dto.ErrorResponseDTO;
+import com.simplesdental.product.model.dto.response.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -85,5 +86,6 @@ import java.lang.annotation.Target;
                         ))
         }
 )
+@SecurityRequirement(name = "authenticationJWT")
 public @interface CreateCategory {
 }

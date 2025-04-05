@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -39,5 +40,6 @@ import java.lang.annotation.Target;
                         )
                 ),
                 @ApiResponse(description = "Not Found | Produto não encontrado", responseCode = "404", content = @Content())})
+@SecurityRequirement(name = "authenticationJWT")
 public @interface GetProductByIdV2 {
 }
