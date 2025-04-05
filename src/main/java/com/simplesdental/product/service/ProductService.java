@@ -19,11 +19,11 @@ public class ProductService {
     }
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return productRepository.findAllWithAlphanumericCode();
     }
 
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Optional<Product> findByIdWithAlphanumericCode(Long id) {
+        return productRepository.findByIdWithAlphanumericCode(id);
     }
 
     public Product save(Product product) {
@@ -32,5 +32,13 @@ public class ProductService {
 
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public List<Product> findAllWithNumericCode() {
+        return productRepository.findAllWithNumericCode();
+    }
+
+    public Optional<Product> findByIdWithNumericCode(Long id) {
+        return productRepository.findByIdWithNumericCode(id);
     }
 }
