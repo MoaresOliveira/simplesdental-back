@@ -6,6 +6,9 @@ import com.simplesdental.product.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,8 @@ public class CategoryController {
 
     @GetMapping
     @GetAllCategories
-    public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.findAll();
+    public ResponseEntity<Page<Category>> getAllCategories(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        Page<Category> categories = categoryService.findAll(pageable);
         if (categories.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

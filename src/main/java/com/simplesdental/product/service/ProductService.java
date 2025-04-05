@@ -3,6 +3,8 @@ package com.simplesdental.product.service;
 import com.simplesdental.product.model.Product;
 import com.simplesdental.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAllWithAlphanumericCode();
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAllWithAlphanumericCode(pageable);
     }
 
     public Optional<Product> findByIdWithAlphanumericCode(Long id) {
@@ -34,8 +36,8 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> findAllWithNumericCode() {
-        return productRepository.findAllWithNumericCode();
+    public Page<Product> findAllWithNumericCode(Pageable pageable) {
+        return productRepository.findAllWithNumericCode(pageable);
     }
 
     public Optional<Product> findByIdWithNumericCode(Long id) {

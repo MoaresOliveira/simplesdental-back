@@ -39,10 +39,6 @@ public class SecurityConfig {
     public static final RequestMatcher USERS_ROUTE =
             new RegexRequestMatcher("^/api(/v\\d+)?/users.*", null);
 
-    private static final String[] AUTHENTICATED_GET_ROUTE = {
-            "/api/v1/auth/context", "/api/v2/products/**", "/api/products/**", "/api/categories/**"
-    };
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthenticationFilter userAuthenticationFilter) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)

@@ -2,8 +2,7 @@ package com.simplesdental.product.mapper;
 
 import com.simplesdental.product.model.Product;
 import com.simplesdental.product.model.dto.ProductV2DTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public class ProductMapper {
 
@@ -31,8 +30,8 @@ public class ProductMapper {
         return product;
     }
 
-    public List<ProductV2DTO> toV2DTOList(List<Product> products) {
+    public Page<ProductV2DTO> toV2DTOPage(Page<Product> products) {
         ProductMapper productMapper = new ProductMapper();
-        return products.stream().map(productMapper::toV2DTO).toList();
+        return products.map(productMapper::toV2DTO);
     }
 }

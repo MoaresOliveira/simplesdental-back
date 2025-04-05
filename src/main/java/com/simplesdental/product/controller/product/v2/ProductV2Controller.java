@@ -9,12 +9,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Product Controller v2")
 @RestController
@@ -33,8 +34,8 @@ public class ProductV2Controller {
     @GetMapping
     @Transactional
     @GetAllProductsV2
-    public ResponseEntity<List<ProductV2DTO>> getAllProducts() {
-        List<Product> products = productService.findAllWithNumericCode();
+    public ResponseEntity<Page<ProductV2DTO>> getAllProducts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        Page<Product> products = productService.findAllWithNumericCode(pageable);
         if (products.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -43,7 +44,7 @@ public class ProductV2Controller {
                 Hibernate.initialize(product.getCategory());
             }
         });
-        return ResponseEntity.ok(productMapper.toV2DTOList(products));
+        return ResponseEntity.ok(productMapper.toV2DTOPage(products));
     }
 
     @GetMapping("/{id}")

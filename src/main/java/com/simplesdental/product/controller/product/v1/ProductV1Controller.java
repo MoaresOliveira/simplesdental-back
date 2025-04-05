@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +32,8 @@ public class ProductV1Controller {
     @GetMapping
     @Transactional
     @GetAllProductsV1
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.findAll();
+    public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        Page<Product> products = productService.findAll(pageable);
         if (products.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

@@ -4,6 +4,7 @@ package com.simplesdental.product.config;
 import com.simplesdental.product.model.User;
 import com.simplesdental.product.repository.UserRepository;
 import com.simplesdental.product.service.JwtTokenService;
+import com.simplesdental.product.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,11 +22,11 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenService jwtTokenService;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserAuthenticationFilter(JwtTokenService jwtTokenService, UserRepository userRepository) {
+    public UserAuthenticationFilter(JwtTokenService jwtTokenService, UserService userService) {
         this.jwtTokenService = jwtTokenService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -34,9 +35,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null) {
             String subject = jwtTokenService.getSubjectFromToken(token);
-            User user = userRepository.findByEmail(subject)
-                    .orElseThrow(() -> new RuntimeException("Authentication failed"));
-            System.out.println("ROLE " + user.getRole().name());
+            User user = userService.findByEmail(subject);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
 

@@ -1,6 +1,8 @@
 package com.simplesdental.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simplesdental.product.config.TestSecurityConfig;
+import com.simplesdental.product.config.UserAuthenticationFilter;
 import com.simplesdental.product.controller.product.v1.ProductV1Controller;
 import com.simplesdental.product.model.Category;
 import com.simplesdental.product.model.Product;
@@ -10,11 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +31,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductV1Controller.class)
+@WebMvcTest(value = ProductV1Controller.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = UserAuthenticationFilter.class)
+})
+@Import(TestSecurityConfig.class)
 public class ProductV1ControllerTest {
 
     @Autowired
@@ -67,12 +78,16 @@ public class ProductV1ControllerTest {
 
     @Test
     void shouldGetAllProducts() throws Exception {
-        when(productService.findAll()).thenReturn(Arrays.asList(product));
+        Pageable pageable = PageRequest.of(0, 10);
+        PageImpl<Product> productPage = new PageImpl<>(List.of(product), pageable, 1);
+        when(productService.findAll(any(Pageable.class))).thenReturn(productPage);
 
         mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(product.getId()))
-                .andExpect(jsonPath("$[0].name").value(product.getName()));
+                .andExpect(jsonPath("$.content[0].id").value(product.getId()))
+                .andExpect(jsonPath("$.content[0].name").value(product.getName()))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.size").value(10));
     }
 
     @Test

@@ -20,30 +20,44 @@ import java.lang.annotation.Target;
                 @ApiResponse(
                         responseCode = "200",
                         content = @Content(
-                                schema = @Schema(implementation = Category.class),
+                                schema = @Schema(implementation = CategoryPage.class),
                                 examples = @ExampleObject(
                                         value = """
-                                                [
-                                                    {
-                                                      "id": 1,
-                                                      "name": "Eletrônicos",
-                                                      "description": "Produtos relacionados à tecnologia e eletrônicos",
-                                                      "products": [
+                                                {
+                                                    "content": [
                                                         {
-                                                          "id": 100,
-                                                          "name": "Smartphone",
-                                                          "description": "Celular com sistema Android",
-                                                          "price": 1999.99
-                                                        },
-                                                        {
-                                                          "id": 101,
-                                                          "name": "Notebook",
-                                                          "description": "Notebook com 16GB RAM",
-                                                          "price": 4999.90
+                                                            "id": 1,
+                                                            "name": "Eletrônicos",
+                                                            "description": "Produtos eletrônicos e gadgets",
+                                                            "products": null
                                                         }
-                                                      ]
-                                                    }
-                                                ]
+                                                    ],
+                                                    "pageable": {
+                                                        "pageNumber": 0,
+                                                        "pageSize": 10,
+                                                        "sort": {
+                                                            "empty": true,
+                                                            "sorted": false,
+                                                            "unsorted": true
+                                                        },
+                                                        "offset": 0,
+                                                        "unpaged": false,
+                                                        "paged": true
+                                                    },
+                                                    "last": true,
+                                                    "totalElements": 1,
+                                                    "totalPages": 1,
+                                                    "size": 10,
+                                                    "number": 0,
+                                                    "sort": {
+                                                        "empty": true,
+                                                        "sorted": false,
+                                                        "unsorted": true
+                                                    },
+                                                    "first": true,
+                                                    "numberOfElements": 1,
+                                                    "empty": false
+                                                }
                                                 """)
                         )
                 ),

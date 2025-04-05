@@ -5,6 +5,7 @@ import com.simplesdental.product.model.dto.request.PasswordRequestDTO;
 import com.simplesdental.product.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class UserController {
     }
 
     @PutMapping("/password")
+    @CacheEvict(value = "userByEmail", key = "#user.email")
     public ResponseEntity<Void> updatePassword(@Valid @RequestBody PasswordRequestDTO request,
                                             @RequestAttribute("user") User user) {
         user.setPassword(request.password());

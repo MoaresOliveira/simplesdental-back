@@ -7,7 +7,9 @@ import com.simplesdental.product.model.dto.response.AuthContextDTO;
 import com.simplesdental.product.model.dto.response.TokenResponseDTO;
 import com.simplesdental.product.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.cache.annotation.Cacheable;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,7 @@ public class AuthController {
     }
 
     @GetMapping("/context")
-    public ResponseEntity<AuthContextDTO> getAuthContext(@RequestAttribute("user") User user) {
-        return ResponseEntity.ok(new AuthContextDTO(user));
+    public AuthContextDTO getAuthContext(@RequestAttribute("user") User user) {
+        return new AuthContextDTO(user);
     }
 }
