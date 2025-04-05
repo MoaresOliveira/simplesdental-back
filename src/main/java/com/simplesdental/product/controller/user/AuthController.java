@@ -7,9 +7,9 @@ import com.simplesdental.product.model.dto.response.AuthContextDTO;
 import com.simplesdental.product.model.dto.response.TokenResponseDTO;
 import com.simplesdental.product.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.cache.annotation.Cacheable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -26,6 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
+        log.info("Usuário autenticado com email {}", request.email());
         return ResponseEntity.ok(authService.login(request));
     }
 
@@ -37,6 +39,8 @@ public class AuthController {
 
     @GetMapping("/context")
     public AuthContextDTO getAuthContext(@RequestAttribute("user") User user) {
-        return new AuthContextDTO(user);
+        AuthContextDTO authContextDTO = new AuthContextDTO(user);
+        log.debug("Auth Context {}", authContextDTO);
+        return authContextDTO;
     }
 }

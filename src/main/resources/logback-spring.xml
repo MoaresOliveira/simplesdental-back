@@ -1,0 +1,68 @@
+<configuration scan="true" debug="true">
+
+    <!-- Define a variável para o diretório de logs -->
+    <property name="LOG_PATH" value="logs" />
+    <property name="LOG_FILE_NAME" value="application" />
+
+    <!-- Encoder JSON -->
+    <include resource="net/logstash/logback/logback-access.xml"/>
+
+    <appender name="ASYNC_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE_JSON" />
+    </appender>
+
+    <appender name="FILE_JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Nome do arquivo por data -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+
+            <!-- Rotaciona também por tamanho -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <!-- Retenção por 30 dias -->
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</pattern>
+                </timestamp>
+                <logLevel />
+                <loggerName />
+                <threadName />
+                <message />
+                <context />
+                <stackTrace />
+                <mdc />
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Console logger opcional -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+
+    <logger name="com.simplesdental.product" level="DEBUG" />
+
+    <!-- Logger raiz -->
+    <root level="INFO">
+        <appender-ref ref="ASYNC_JSON" />
+        <appender-ref ref="ASYNC_STDOUT" />
+    </root>
+
+</configuration>
