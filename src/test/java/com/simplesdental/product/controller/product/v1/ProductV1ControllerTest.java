@@ -1,9 +1,8 @@
-package com.simplesdental.product.controller;
+package com.simplesdental.product.controller.product.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplesdental.product.config.TestSecurityConfig;
 import com.simplesdental.product.config.UserAuthenticationFilter;
-import com.simplesdental.product.controller.product.v1.ProductV1Controller;
 import com.simplesdental.product.model.Category;
 import com.simplesdental.product.model.Product;
 import com.simplesdental.product.service.ProductService;
@@ -29,7 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = ProductV1Controller.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = UserAuthenticationFilter.class)

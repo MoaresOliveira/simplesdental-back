@@ -1,5 +1,6 @@
 package com.simplesdental.product.exception;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.simplesdental.product.model.dto.response.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -68,6 +69,16 @@ public class GlobalExceptionHandler {
                 new ErrorResponseDTO(HttpStatus.NOT_FOUND, request.getRequestURI(), ex.getMessage());
         log.warn("{}", error);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+
+    @ExceptionHandler(JWTVerificationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleJWTVerificationException(
+            JWTVerificationException ex, HttpServletRequest request)  {
+        ErrorResponseDTO error =
+                new ErrorResponseDTO(HttpStatus.UNAUTHORIZED, request.getRequestURI(), ex.getMessage());
+        log.warn("{}", error);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)

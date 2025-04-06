@@ -17,6 +17,13 @@ public class JwtTokenService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
+    public JwtTokenService() {
+    }
+
+    public JwtTokenService(String SECRET_KEY) {
+        this.SECRET_KEY = SECRET_KEY;
+    }
+
     private static final String ISSUER = "product-api";
 
     public String generateToken(User user) {
