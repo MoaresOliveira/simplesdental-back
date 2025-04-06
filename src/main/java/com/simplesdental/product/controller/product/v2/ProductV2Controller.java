@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Product Controller v2")
+@Tag(name = "Product Controller v2", description = "Operações CRUD para produtos (com 'code' númerico)")
 @RestController
 @RequestMapping("/api/v2/products")
 public class ProductV2Controller {

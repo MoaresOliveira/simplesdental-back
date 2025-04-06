@@ -1,7 +1,7 @@
 package com.simplesdental.product.controller.product.swagger.v2;
 
-import com.simplesdental.product.model.dto.response.ErrorResponseDTO;
 import com.simplesdental.product.model.dto.ProductV2DTO;
+import com.simplesdental.product.model.dto.response.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

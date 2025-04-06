@@ -1,9 +1,7 @@
 package com.simplesdental.product.model.dto.request;
 
-import com.simplesdental.product.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class UserRegisterDTO {
 
@@ -11,13 +9,11 @@ public class UserRegisterDTO {
     private String name;
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank
     private String password;
-
-    @NotNull
-    private UserRole role;
 
     public @NotBlank String getName() {
         return name;
@@ -41,13 +37,5 @@ public class UserRegisterDTO {
 
     public void setPassword(@NotBlank String password) {
         this.password = password;
-    }
-
-    public @NotNull UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(@NotNull UserRole role) {
-        this.role = role;
     }
 }

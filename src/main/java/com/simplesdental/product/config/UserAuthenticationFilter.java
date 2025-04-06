@@ -2,7 +2,6 @@ package com.simplesdental.product.config;
 
 
 import com.simplesdental.product.model.User;
-import com.simplesdental.product.repository.UserRepository;
 import com.simplesdental.product.service.JwtTokenService;
 import com.simplesdental.product.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 public class UserAuthenticationFilter extends OncePerRequestFilter {
@@ -32,8 +32,9 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = recoveryToken(request);
-
-        if (token != null) {
+        String uri = request.getRequestURI();
+        boolean isOpenRoute = Arrays.stream(SecurityConfig.OPEN_ROUTES_REGEX).anyMatch(uri::matches);
+        if (token != null && !isOpenRoute) {
             String subject = jwtTokenService.getSubjectFromToken(token);
             User user = userService.findByEmail(subject);
             Authentication authentication =

@@ -3,7 +3,6 @@ package com.simplesdental.product.config;
 import com.simplesdental.product.enums.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,8 +22,12 @@ public class SecurityConfig {
 
     private AuthenticationManager authenticationManager;
 
-    private final String[] OPEN_ROUTES = {
+    public static final String[] OPEN_ROUTES = {
             "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/api/*/auth/login", "/api/*/auth/register"
+    };
+
+    public static final String[] OPEN_ROUTES_REGEX = {
+            "/swagger-ui.html", "/v3/api-docs/.*", "/swagger-ui/.*", "/api/v\\d+/auth/login", "/api/v\\d+/auth/register"
     };
 
     public static final RequestMatcher PRODUCTS_ROUTE_GET =
@@ -36,8 +39,8 @@ public class SecurityConfig {
     public static final RequestMatcher AUTH_ROUTE_GET =
             new RegexRequestMatcher("^/api(/v\\d+)?/auth.*", "GET");
 
-    public static final RequestMatcher USERS_ROUTE =
-            new RegexRequestMatcher("^/api(/v\\d+)?/users.*", null);
+    public static final RequestMatcher USER_PASSWORD_ROUTE =
+            new RegexRequestMatcher("^/api(/v\\d+)?/users/password", "PUT");
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthenticationFilter userAuthenticationFilter) throws Exception {
@@ -46,7 +49,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(OPEN_ROUTES).permitAll()
-                        .requestMatchers(PRODUCTS_ROUTE_GET, CATEGORIES_ROUTE_GET, AUTH_ROUTE_GET, USERS_ROUTE)
+                        .requestMatchers(PRODUCTS_ROUTE_GET, CATEGORIES_ROUTE_GET, AUTH_ROUTE_GET, USER_PASSWORD_ROUTE)
                         .hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
                         .anyRequest().hasAnyAuthority(UserRole.ADMIN.name()))
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

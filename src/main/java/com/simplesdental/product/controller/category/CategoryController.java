@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Tag(name = "Category Controller")
+@Tag(name = "Category Controller", description = "Operações CRUD para categorias")
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {

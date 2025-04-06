@@ -4,8 +4,6 @@ import com.simplesdental.product.model.dto.response.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,6 @@ import java.util.regex.Pattern;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    private static final Marker CRITICAL = MarkerFactory.getMarker("CRITICAL");
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationExceptions(
@@ -62,6 +59,15 @@ public class GlobalExceptionHandler {
                 new ErrorResponseDTO(HttpStatus.BAD_REQUEST, request.getRequestURI(), errors);
         log.warn("{}", error);
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(
+            ResourceNotFoundException ex, HttpServletRequest request)  {
+        ErrorResponseDTO error =
+                new ErrorResponseDTO(HttpStatus.NOT_FOUND, request.getRequestURI(), ex.getMessage());
+        log.warn("{}", error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)

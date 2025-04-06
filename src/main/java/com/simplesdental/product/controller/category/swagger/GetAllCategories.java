@@ -1,6 +1,5 @@
 package com.simplesdental.product.controller.category.swagger;
 
-import com.simplesdental.product.model.Category;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

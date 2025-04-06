@@ -1,6 +1,7 @@
 package com.simplesdental.product.service;
 
 import com.simplesdental.product.config.SecurityConfig;
+import com.simplesdental.product.enums.UserRole;
 import com.simplesdental.product.mapper.UserMapper;
 import com.simplesdental.product.model.User;
 import com.simplesdental.product.model.dto.request.LoginRequestDTO;
@@ -41,11 +42,9 @@ public class AuthService implements UserDetailsService {
     }
 
     public User register(@Valid UserRegisterDTO request) {
-        return userService.save(userMapper.ToEntity(request));
-    }
-
-    public void context() {
-
+        User user = userMapper.toEntity(request);
+        user.setRole(UserRole.USER);
+        return userService.save(user);
     }
 
     @Override
